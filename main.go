@@ -100,6 +100,16 @@ func (f formatter) expr(e ast.Expr) error {
 		fmt.Fprint(f.w, x.X.Lit)
 	case *ast.Ident:
 		fmt.Fprint(f.w, x.Name.Lit)
+	case *ast.Add:
+		err := f.expr(x.X)
+		if err != nil {
+			return err
+		}
+		fmt.Fprintf(f.w, " + ")
+		err = f.expr(x.Y)
+		if err != nil {
+			return err
+		}
 	default:
 		fmt.Fprint(f.w, e)
 	}
