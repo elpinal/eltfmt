@@ -142,6 +142,23 @@ func (f formatter) expr(e ast.Expr) error {
 		if err != nil {
 			return err
 		}
+	case *ast.App:
+		err := f.expr(x.Fn)
+		if err != nil {
+			return err
+		}
+		f.w.WriteRune(' ')
+		err = f.expr(x.Arg)
+		if err != nil {
+			return err
+		}
+	case *ast.Abs:
+		f.w.WriteString(x.Param.Lit)
+		f.w.WriteString(" -> ")
+		err := f.expr(x.Body)
+		if err != nil {
+			return err
+		}
 	default:
 		fmt.Fprint(f.w, e)
 	}
