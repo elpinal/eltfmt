@@ -159,6 +159,22 @@ func (f formatter) expr(e ast.Expr) error {
 		if err != nil {
 			return err
 		}
+	case *ast.If:
+		fmt.Fprintf(f.w, "if ")
+		err := f.expr(x.Cond)
+		if err != nil {
+			return err
+		}
+		fmt.Fprintf(f.w, " then ")
+		err = f.expr(x.E1)
+		if err != nil {
+			return err
+		}
+		fmt.Fprintf(f.w, " else ")
+		err = f.expr(x.E2)
+		if err != nil {
+			return err
+		}
 	default:
 		fmt.Fprint(f.w, e)
 	}
