@@ -98,6 +98,8 @@ func (f formatter) expr(e ast.Expr) error {
 	switch x := e.(type) {
 	case *ast.Int:
 		fmt.Fprint(f.w, x.X.Lit)
+	case *ast.Bool:
+		fmt.Fprint(f.w, x.X.Lit)
 	case *ast.Ident:
 		fmt.Fprint(f.w, x.Name.Lit)
 	case *ast.Add:
@@ -106,6 +108,36 @@ func (f formatter) expr(e ast.Expr) error {
 			return err
 		}
 		fmt.Fprintf(f.w, " + ")
+		err = f.expr(x.Y)
+		if err != nil {
+			return err
+		}
+	case *ast.Sub:
+		err := f.expr(x.X)
+		if err != nil {
+			return err
+		}
+		fmt.Fprintf(f.w, " - ")
+		err = f.expr(x.Y)
+		if err != nil {
+			return err
+		}
+	case *ast.Mul:
+		err := f.expr(x.X)
+		if err != nil {
+			return err
+		}
+		fmt.Fprintf(f.w, " * ")
+		err = f.expr(x.Y)
+		if err != nil {
+			return err
+		}
+	case *ast.Div:
+		err := f.expr(x.X)
+		if err != nil {
+			return err
+		}
+		fmt.Fprintf(f.w, " / ")
 		err = f.expr(x.Y)
 		if err != nil {
 			return err
