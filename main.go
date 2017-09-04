@@ -38,8 +38,8 @@ func run(src []byte, filename string) error {
 		return errors.Wrapf(err, "parsing %s", filename)
 	}
 	w := bufio.NewWriter(os.Stdout)
-	fmt := newFormatter(w)
-	err = fmt.program(wd)
+	f := newFormatter(w)
+	err = f.program(wd)
 	if err != nil {
 		return errors.Wrapf(err, "formatting %s", filename)
 	}
