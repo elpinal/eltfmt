@@ -36,15 +36,19 @@ func runMain(filename string) error {
 }
 
 func run(src []byte, filename string) error {
+	return errors.Wrap(format(src), filename)
+}
+
+func format(src []byte) error {
 	wd, err := parser.Parse(src)
 	if err != nil {
-		return errors.Wrapf(err, "parsing %s", filename)
+		return errors.Wrap(err, "parse")
 	}
 	w := bufio.NewWriter(os.Stdout)
 	f := newFormatter(w)
 	err = f.program(wd)
 	if err != nil {
-		return errors.Wrapf(err, "formatting %s", filename)
+		return errors.Wrap(err, "format")
 	}
 	return w.Flush()
 }
