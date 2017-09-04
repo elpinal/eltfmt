@@ -178,7 +178,10 @@ func (f formatter) expr(e ast.Expr) error {
 		}
 	case *ast.ParenExpr:
 		f.w.WriteByte('(')
-		f.expr(x.X)
+		err := f.expr(x.X)
+		if err != nil {
+			return err
+		}
 		f.w.WriteByte(')')
 	case *ast.Cmp:
 		err := f.expr(x.LHS)
