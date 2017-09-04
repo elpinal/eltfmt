@@ -176,6 +176,10 @@ func (f formatter) expr(e ast.Expr) error {
 		if err != nil {
 			return err
 		}
+	case *ast.ParenExpr:
+		f.w.WriteRune('(')
+		f.expr(x.X)
+		f.w.WriteRune(')')
 	default:
 		return fmt.Errorf("unknown expression: %[1]v (type: %[1]T)", e)
 	}
