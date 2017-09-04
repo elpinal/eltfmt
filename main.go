@@ -180,6 +180,31 @@ func (f formatter) expr(e ast.Expr) error {
 		f.w.WriteRune('(')
 		f.expr(x.X)
 		f.w.WriteRune(')')
+	case *ast.Cmp:
+		err := f.expr(x.LHS)
+		if err != nil {
+			return err
+		}
+		switch x.Op {
+		case ast.Eq:
+			f.w.WriteString(" == ")
+		case ast.NE:
+			f.w.WriteString(" /= ")
+		case ast.LT:
+			f.w.WriteString(" < ")
+		case ast.GT:
+			f.w.WriteString(" > ")
+		case ast.LE:
+			f.w.WriteString(" <= ")
+		case ast.GE:
+			f.w.WriteString(" >= ")
+		default:
+			return fmt.Errorf("unknown operator: %v (in %v)", x.Op, e)
+		}
+		err = f.expr(x.RHS)
+		if err != nil {
+			return err
+		}
 	default:
 		return fmt.Errorf("unknown expression: %[1]v (type: %[1]T)", e)
 	}
