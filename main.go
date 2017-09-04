@@ -177,7 +177,7 @@ func (f formatter) expr(e ast.Expr) error {
 			return err
 		}
 	default:
-		fmt.Fprint(f.w, e)
+		return fmt.Errorf("unknown expression: %[1]v (type: %[1]T)", e)
 	}
 	return nil
 }
