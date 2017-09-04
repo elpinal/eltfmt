@@ -10,6 +10,12 @@ import (
 func TestProgram(t *testing.T) {
 	input := []byte(` n  =  3+1
 m = n * (3 +1)
+f = \ x -> if true  then x-1 else (x * 2)
+x = f n>4
+lt = 1< 2
+gt = 5 > 2
+le = m <=n * 2
+ge =1>=2
 m / n`)
 	wd, err := parser.Parse(input)
 	if err != nil {
@@ -23,6 +29,12 @@ m / n`)
 	}
 	if want := `n = 3 + 1
 m = n * (3 + 1)
+f = \x -> if true then x - 1 else (x * 2)
+x = f n > 4
+lt = 1 < 2
+gt = 5 > 2
+le = m <= n * 2
+ge = 1 >= 2
 m / n
 `; buf.String() != want {
 		t.Errorf("f.program = %q; want %q", buf.String(), want)
