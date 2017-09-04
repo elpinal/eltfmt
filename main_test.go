@@ -17,15 +17,10 @@ gt = 5 > 2
 le = m <=n * 2
 ge =1>=2
 m / n`)
-	wd, err := parser.Parse(input)
-	if err != nil {
-		t.Errorf("parsing input: %v", err)
-	}
 	var buf bytes.Buffer
-	f := newFormatter(&buf)
-	err = f.program(wd)
+	err := format(&buf, input)
 	if err != nil {
-		t.Errorf("formatting input: %v", err)
+		t.Errorf("format: %v", err)
 	}
 	if want := `n = 3 + 1
 m = n * (3 + 1)
