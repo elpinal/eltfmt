@@ -84,7 +84,7 @@ func (f formatter) decls(decls []*ast.Decl) error {
 }
 
 func (f formatter) decl(decl *ast.Decl) error {
-	fmt.Fprint(f.w, decl.LHS.Lit)
+	f.w.WriteString(decl.LHS.Lit)
 	f.w.WriteString(" = ")
 	err := f.expr(decl.RHS)
 	if err != nil {
@@ -97,17 +97,17 @@ func (f formatter) decl(decl *ast.Decl) error {
 func (f formatter) expr(e ast.Expr) error {
 	switch x := e.(type) {
 	case *ast.Int:
-		fmt.Fprint(f.w, x.X.Lit)
+		f.w.WriteString(x.X.Lit)
 	case *ast.Bool:
-		fmt.Fprint(f.w, x.X.Lit)
+		f.w.WriteString(x.X.Lit)
 	case *ast.Ident:
-		fmt.Fprint(f.w, x.Name.Lit)
+		f.w.WriteString(x.Name.Lit)
 	case *ast.Add:
 		err := f.expr(x.X)
 		if err != nil {
 			return err
 		}
-		fmt.Fprintf(f.w, " + ")
+		f.w.WriteString(" + ")
 		err = f.expr(x.Y)
 		if err != nil {
 			return err
@@ -117,7 +117,7 @@ func (f formatter) expr(e ast.Expr) error {
 		if err != nil {
 			return err
 		}
-		fmt.Fprintf(f.w, " - ")
+		f.w.WriteString(" - ")
 		err = f.expr(x.Y)
 		if err != nil {
 			return err
@@ -127,7 +127,7 @@ func (f formatter) expr(e ast.Expr) error {
 		if err != nil {
 			return err
 		}
-		fmt.Fprintf(f.w, " * ")
+		f.w.WriteString(" * ")
 		err = f.expr(x.Y)
 		if err != nil {
 			return err
@@ -137,7 +137,7 @@ func (f formatter) expr(e ast.Expr) error {
 		if err != nil {
 			return err
 		}
-		fmt.Fprintf(f.w, " / ")
+		f.w.WriteString(" / ")
 		err = f.expr(x.Y)
 		if err != nil {
 			return err
@@ -161,17 +161,17 @@ func (f formatter) expr(e ast.Expr) error {
 			return err
 		}
 	case *ast.If:
-		fmt.Fprintf(f.w, "if ")
+		f.w.WriteString("if ")
 		err := f.expr(x.Cond)
 		if err != nil {
 			return err
 		}
-		fmt.Fprintf(f.w, " then ")
+		f.w.WriteString(" then ")
 		err = f.expr(x.E1)
 		if err != nil {
 			return err
 		}
-		fmt.Fprintf(f.w, " else ")
+		f.w.WriteString(" else ")
 		err = f.expr(x.E2)
 		if err != nil {
 			return err
