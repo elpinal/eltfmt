@@ -15,6 +15,9 @@ import (
 )
 
 func main() {
+	flag.Usage = func() {
+		fmt.Println("Usage: eltfmt filename")
+	}
 	flag.Parse()
 	if flag.NArg() < 1 {
 		fmt.Fprintln(os.Stdout, "eltfmt: no Elacht source file given")
