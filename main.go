@@ -32,25 +32,25 @@ func runMain(filename string) error {
 	if err != nil {
 		return errors.Wrap(err, "eltfmt")
 	}
-	return run(b, filename)
+	return run(os.Stdout, b, filename)
 }
 
-func run(src []byte, filename string) error {
-	return errors.Wrap(format(src), filename)
+func run(w io.Writer, src []byte, filename string) error {
+	return errors.Wrap(format(w, src), filename)
 }
 
-func format(src []byte) error {
+func format(w io.Writer, src []byte) error {
 	wd, err := parser.Parse(src)
 	if err != nil {
 		return errors.Wrap(err, "parse")
 	}
-	w := bufio.NewWriter(os.Stdout)
-	f := newFormatter(w)
+	writer := bufio.NewWriter(w)
+	f := newFormatter(writer)
 	err = f.program(wd)
 	if err != nil {
 		return errors.Wrap(err, "format")
 	}
-	return w.Flush()
+	return writer.Flush()
 }
 
 type writer interface {
