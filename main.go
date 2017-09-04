@@ -49,7 +49,7 @@ func run(src []byte, filename string) error {
 type writer interface {
 	io.Writer
 	WriteString(string) (int, error)
-	WriteRune(rune) (int, error)
+	WriteByte(byte) error
 }
 
 type formatter struct {
@@ -69,7 +69,7 @@ func (f formatter) program(wd *ast.WithDecls) error {
 	if err != nil {
 		return err
 	}
-	f.w.WriteRune('\n')
+	f.w.WriteByte('\n')
 	return nil
 }
 
@@ -90,7 +90,7 @@ func (f formatter) decl(decl *ast.Decl) error {
 	if err != nil {
 		return err
 	}
-	f.w.WriteRune('\n')
+	f.w.WriteByte('\n')
 	return nil
 }
 
@@ -147,13 +147,13 @@ func (f formatter) expr(e ast.Expr) error {
 		if err != nil {
 			return err
 		}
-		f.w.WriteRune(' ')
+		f.w.WriteByte(' ')
 		err = f.expr(x.Arg)
 		if err != nil {
 			return err
 		}
 	case *ast.Abs:
-		f.w.WriteRune('\\')
+		f.w.WriteByte('\\')
 		f.w.WriteString(x.Param.Lit)
 		f.w.WriteString(" -> ")
 		err := f.expr(x.Body)
@@ -177,9 +177,9 @@ func (f formatter) expr(e ast.Expr) error {
 			return err
 		}
 	case *ast.ParenExpr:
-		f.w.WriteRune('(')
+		f.w.WriteByte('(')
 		f.expr(x.X)
-		f.w.WriteRune(')')
+		f.w.WriteByte(')')
 	case *ast.Cmp:
 		err := f.expr(x.LHS)
 		if err != nil {
