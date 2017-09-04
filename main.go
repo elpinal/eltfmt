@@ -20,16 +20,19 @@ func main() {
 		fmt.Fprintln(os.Stdout, "eltfmt: no Elacht source file given")
 		os.Exit(1)
 	}
-	b, err := ioutil.ReadFile(flag.Arg(0))
-	if err != nil {
-		fmt.Fprintf(os.Stdout, "eltfmt: %v\n", err)
-		os.Exit(1)
-	}
-	err = run(b, flag.Arg(0))
+	err := runMain(flag.Arg(0))
 	if err != nil {
 		fmt.Fprintln(os.Stdout, err)
 		os.Exit(1)
 	}
+}
+
+func runMain(filename string) error {
+	b, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return errors.Wrap(err, "eltfmt")
+	}
+	return run(b, filename)
 }
 
 func run(src []byte, filename string) error {
