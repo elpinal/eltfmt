@@ -153,6 +153,7 @@ func (f formatter) expr(e ast.Expr) error {
 			return err
 		}
 	case *ast.Abs:
+		f.w.WriteRune('\\')
 		f.w.WriteString(x.Param.Lit)
 		f.w.WriteString(" -> ")
 		err := f.expr(x.Body)
